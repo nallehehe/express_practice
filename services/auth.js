@@ -54,3 +54,20 @@ exports.loginUser = async (req, res, next) => {
     return next(new ErrorResponse('Login failed', 500));
   }
 };
+
+exports.logoutUser = async (req, res, next) => {
+  try {
+    res.clearCookie('ACCESS_TOKEN', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (error) {
+    return next(new ErrorResponse('Logout failed', 500));
+  }
+};
