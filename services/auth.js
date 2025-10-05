@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ErrorResponse = require('../middlewares/errorResponse');
 
-
 //https://dvmhn07.medium.com/jwt-authentication-in-node-js-a-practical-guide-c8ab1b432a49
 
 exports.registerUser = async (req, res, next) => {
@@ -39,11 +38,18 @@ exports.loginUser = async (req, res, next) => {
       { userId: user._id },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: '2h',
       }
     );
 
-    res.status(200).json({ success: true, token });
+    return res
+      .cookie('ACCESS_TOKEN', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 2 * 60 * 60 * 1000,
+      })
+      .status(200)
+      .json({ success: true, token });
   } catch (error) {
     return next(new ErrorResponse('Login failed', 500));
   }
