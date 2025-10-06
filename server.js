@@ -6,6 +6,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 const errorHandler = require('./middlewares/error');
 const authRoutes = require('./routes/auth');
+const bookRoutes = require('./routes/book');
 const protectedRoutes = require('./routes/protectedRoute');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRoutes);
+app.use('/book', bookRoutes);
 app.use('/protected', protectedRoutes);
 
 app.use(errorHandler);

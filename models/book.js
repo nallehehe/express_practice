@@ -12,6 +12,9 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    imageUrl: {
+      type: String,
+    },
     review: {
       rating: {
         type: Number,
