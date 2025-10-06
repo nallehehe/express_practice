@@ -20,6 +20,25 @@ exports.registerUser = async (req, res, next) => {
   }
 };
 
+exports.registerAdmin = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username,
+      password: hashedPassword,
+      role: 'admin',
+    });
+    await user.save();
+
+    res.status(201).json({ success: true, data: user });
+  } catch (error) {
+    return next(new ErrorResponse('Registration failed', 500));
+  }
+};
+
 exports.loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
